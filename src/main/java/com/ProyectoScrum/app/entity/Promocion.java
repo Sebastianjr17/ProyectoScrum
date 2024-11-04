@@ -11,7 +11,7 @@ public class Promocion {
     private String id;  // ID de la promoción
     private String nombre;  // Nombre de la promoción
     private String descripcion;  // Descripción de la promoción
-    private double descuento;  // Descuento aplicado
+    private int descuento;  // Descuento aplicado (ahora es un entero)
     private List<String> eventosIds; // Lista de IDs de eventos aplicables
 
     // Getter y Setter para id
@@ -40,11 +40,11 @@ public class Promocion {
         this.descripcion = descripcion;
     }
 
-    public double getDescuento() {
-        return descuento;
+    public int getDescuento() {
+        return descuento; // Ahora retorna un int
     }
 
-    public void setDescuento(double descuento) {
+    public void setDescuento(int descuento) { // Ahora acepta un int
         this.descuento = descuento;
     }
 
