@@ -64,7 +64,6 @@
             <div class="card-body">
                 <form th:action="@{/reservas/save}" th:object="${reserva}" method="post">
                     <input type="hidden" th:if="${reserva.id != null}" th:field="*{id}" th:value="${reserva.id}" />
-                    <input type="hidden" th:field="*{eventoId}" th:value="${eventoId}" />
 
                     <div class="form-group">
                         <label for="clienteId">ID Cliente</label>
@@ -73,12 +72,12 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="eventoId">Evento</label>
-                        <select class="form-control" th:field="*{eventoId}" required>
-                            <option th:each="evento : ${eventos}" th:value="${evento.id}" th:text="${evento.nombre}"></option>
-                        </select>
-                    </div>
+					<div class="form-group">
+					    <label for="eventoId">Evento</label>
+					    <select class="form-control" th:field="*{eventoId}" required>
+					        <option th:each="evento : ${eventos}" th:value="${evento.id}" th:text="${evento.nombre}"></option>
+					    </select>
+					</div>
 
                     <div class="form-group">
                         <label for="cantidadEntradas">Cantidad de Entradas</label>
