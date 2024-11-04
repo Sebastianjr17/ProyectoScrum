@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Evento</title>
+    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/5900/5900413.png" type="image/x-icon">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Ajustes para video de fondo */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* Fondo semitransparente para el contenido */
+        .container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 8px;
+            color: #fff;
+            z-index: 1;
+            position: relative;
+        }
+
+        .card {
+            margin-top: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid #5cb85c; /* Color de borde para resaltar */
+        }
+
+        .card-header {
+            background-color: #5cb85c;
+            color: white;
+        }
+
+        .btn-custom {
+            background-color: #5cb85c;
+            color: white;
+        }
+
+        .btn-custom:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Video de fondo -->
+    <video autoplay muted loop class="video-background">
+        <source th:src="@{/videos/mi-video.mp4}" type="video/mp4">
+        Tu navegador no soporta el elemento de video.
+    </video>
+
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h2 th:text="${evento != null && evento.id != null ? 'Editar Evento' : 'Nuevo Evento'}"></h2>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/eventos/save}" th:object="${evento}" method="post">
+                    <input type="hidden" th:if="${evento.id != null}" th:field="*{id}" th:value="${evento.id}" />
+                    <div class="form-group">
+                        <label for="nombre">Nombre</label>
+                        <input type="text" class="form-control" th:field="*{nombre}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha">Fecha</label>
+                        <input type="date" class="form-control" th:field="*{fecha}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="descripcion">Descripción</label>
+                        <textarea class="form-control" th:field="*{descripcion}" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="precioEntrada">Precio Entrada (COP)</label>
+                        <input type="text" id="precioEntrada" class="form-control" th:field="*{precioEntrada}" required oninput="formatPrecio(this)">
+                    </div>
+                    <div class="form-group">
+                        <label for="salaId">Sala</label>
+                        <select class="form-control" th:field="*{salaId}" required>
+                            <option value="" disabled selected>Seleccione una sala</option>
+                            <th:block th:each="sala : ${salas}">
+                                <option th:value="${sala.id}" th:text="${sala.nombre}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-custom">Guardar</button>
+                    <a th:href="@{/eventos/}" class="btn btn-primary">Regresar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function formatPrecio(input) {
+            // Remover caracteres no numéricos
+            let valor = input.value.replace(/\./g, '').replace(/,/g, '.');
+
+            // Verificar si el valor es un número válido
+            if (!isNaN(valor) && valor !== '') {
+                // Convertir el número a un formato con puntos como separadores de miles
+                valor = parseFloat(valor);
+                input.value = new Intl.NumberFormat('es-CO', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(valor);
+            } else {
+                // Si no es un número válido, reiniciar el valor
+                input.value = '';
+            }
+        }
+    </script>
+</body>
+
+</html>
+
+
