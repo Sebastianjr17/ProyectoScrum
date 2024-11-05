@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservas</title>
-	<link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/5900/5900413.png" type="image/x-icon">
+    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/5900/5900413.png" type="image/x-icon">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         /* Ajustes para video de fondo */
@@ -40,30 +40,30 @@
 <body>
     <!-- Video de fondo -->
     <video autoplay muted loop class="video-background">
-        <source th:src="@{/videos/mi-video.mp4}" type="video/mp4">
+        <source src="/videos/mi-video.mp4" type="video/mp4">
         Tu navegador no soporta el elemento de video.
     </video>
 
     <div class="container mt-5">
         <h1 class="mb-4">Reservas</h1>
         <div class="mb-3">
-            <a th:href="@{/reservas/new}" class="btn btn-primary">Nueva Reserva</a>
-            <a th:href="@{/}" class="btn btn-secondary">Regresar</a>
+            <a href="/reservas/new" class="btn btn-primary">Nueva Reserva</a>
+            <a href="/" class="btn btn-secondary">Regresar</a>
         </div>
         <div class="table-responsive">
             <table class="table table-bordered table-dark">
                 <thead class="thead-light">
                     <tr>
-                        <th>ID Cliente</th>
-                        <th>ID Evento</th>
+                        <th>Nombre Cliente</th>
+                        <th>Nombre Evento</th>
                         <th>Cantidad de Entradas</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody th:each="reserva : ${reservas}">
                     <tr>
-                        <td th:text="${reserva.clienteId}"></td>
-                        <td th:text="${reserva.eventoId}"></td>
+                        <td th:text="${reserva.clienteNombre}"></td> <!-- Mostrar el nombre del cliente -->
+                        <td th:text="${reserva.eventoNombre}"></td> <!-- Mostrar el nombre del evento -->
                         <td th:text="${reserva.cantidadEntradas}"></td>
                         <td>
                             <div class="d-flex d-md-inline-block">

@@ -1,11 +1,16 @@
 package com.ProyectoScrum.app.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.ProyectoScrum.app.entity.Evento;
+import com.ProyectoScrum.app.entity.PromocionDTO;
 import com.ProyectoScrum.app.entity.Promocion;
 import com.ProyectoScrum.app.exception.NotFoundException;
 import com.ProyectoScrum.app.repository.PromocionRepository;
@@ -23,9 +28,25 @@ public class PromocionController {
 
     @GetMapping("/")
     public String listaPromociones(Model model) {
-        model.addAttribute("promociones", promocionRepository.findAll());
+        List<Promocion> promociones = promocionRepository.findAll();
+        List<Evento> eventos = eventoRepository.findAll(); // Obtener todos los eventos
+        List<PromocionDTO> promocionesDTO = promociones.stream().map(promocion -> {
+            // Obtener los nombres de los eventos asociados a la promoción
+            List<String> nombreEventos = promocion.getEventosIds().stream()
+                .map(eventoId -> eventos.stream()
+                    .filter(evento -> evento.getId().equals(eventoId))
+                    .map(Evento::getNombre)
+                    .findFirst()
+                    .orElse("Desconocido"))
+                .collect(Collectors.toList());
+            
+            return new PromocionDTO(promocion.getId(), promocion.getNombre(), promocion.getDescripcion(), promocion.getDescuento(), nombreEventos);
+        }).collect(Collectors.toList());
+
+        model.addAttribute("promociones", promocionesDTO);
         return "promociones";
     }
+
 
     @GetMapping("/new")
     public String nuevaPromocion(Model model) {

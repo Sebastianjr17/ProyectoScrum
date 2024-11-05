@@ -10,8 +10,9 @@ import com.ProyectoScrum.app.entity.Evento;
 import com.ProyectoScrum.app.exception.NotFoundException;
 import com.ProyectoScrum.app.repository.ReservaRepository;
 import com.ProyectoScrum.app.repository.ClienteRepository;
-import com.ProyectoScrum.app.repository.EventoRepository; // Importa el repositorio de Evento
-
+import com.ProyectoScrum.app.repository.EventoRepository;
+import com.ProyectoScrum.app.entity.ReservaDTO;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -25,12 +26,25 @@ public class ReservaController {
     private ClienteRepository clienteRepository;
 
     @Autowired
-    private EventoRepository eventoRepository; // Agrega el repositorio de Evento
+    private EventoRepository eventoRepository;
 
     @GetMapping("/")
     public String listaReservas(Model model) {
-        model.addAttribute("reservas", reservaRepository.findAll());
-        return "reservas";
+        List<Reserva> reservas = reservaRepository.findAll();
+        List<ReservaDTO> reservaDTOs = new ArrayList<>();
+
+        for (Reserva reserva : reservas) {
+            Cliente cliente = clienteRepository.findById(reserva.getClienteId()).orElse(null);
+            Evento evento = eventoRepository.findById(reserva.getEventoId()).orElse(null);
+
+            reservaDTOs.add(new ReservaDTO(reserva.getId(), 
+                                             cliente != null ? cliente.getNombre() : "Desconocido",
+                                             evento != null ? evento.getNombre() : "Desconocido", 
+                                             reserva.getCantidadEntradas()));
+        }
+
+        model.addAttribute("reservas", reservaDTOs);
+        return "reservas"; // nombre de la vista
     }
 
     @GetMapping("/new")
@@ -40,8 +54,8 @@ public class ReservaController {
         List<Cliente> clientes = clienteRepository.findAll();
         model.addAttribute("clientes", clientes);
 
-        List<Evento> eventos = eventoRepository.findAll(); // Obtiene todos los eventos
-        model.addAttribute("eventos", eventos); // Agrega la lista de eventos al modelo
+        List<Evento> eventos = eventoRepository.findAll();
+        model.addAttribute("eventos", eventos);
 
         return "reservas-formulario"; 
     }
@@ -55,8 +69,8 @@ public class ReservaController {
         List<Cliente> clientes = clienteRepository.findAll();
         model.addAttribute("clientes", clientes);
 
-        List<Evento> eventos = eventoRepository.findAll(); // Obtiene todos los eventos
-        model.addAttribute("eventos", eventos); // Agrega la lista de eventos al modelo para la edición
+        List<Evento> eventos = eventoRepository.findAll();
+        model.addAttribute("eventos", eventos);
 
         return "reservas-formulario"; 
     }

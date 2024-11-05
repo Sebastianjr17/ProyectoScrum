@@ -70,27 +70,27 @@
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody th:each="promocion : ${promociones}">
-                    <tr>
-                        <td th:text="${promocion.nombre}"></td>
-                        <td th:text="${promocion.descripcion}"></td>
-						<td th:text="${promocion.descuento} + '%'"></td>
-                        <td>
-                            <span th:if="${promocion.eventosIds.size() > 0}">
-                                <span th:each="eventoId, iterStat : ${promocion.eventosIds}" th:text="${eventoId}" th:if="${!iterStat.last}">, </span>
-                                <span th:each="eventoId, iterStat : ${promocion.eventosIds}" th:text="${eventoId}" th:if="${iterStat.last}"></span>
-                            </span>
-                            <span th:if="${promocion.eventosIds.size() == 0}">Ninguno</span>
-                        </td>
-                        <td>
-                            <div class="d-flex d-md-inline-block">
-                                <a th:href="@{/promociones/edit/{id}(id=${promocion.id})}" class="btn btn-warning btn-sm btn-action mr-2">Editar</a>
-                                <a th:href="@{/promociones/delete/{id}(id=${promocion.id})}" class="btn btn-danger btn-sm btn-action"
-                                   onclick="return confirm('¿Estás seguro de que quieres eliminar esta promoción?');">Eliminar</a>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
+				<tbody th:each="promocion : ${promociones}">
+				    <tr>
+				        <td th:text="${promocion.nombre}"></td>
+				        <td th:text="${promocion.descripcion}"></td>
+				        <td th:text="${promocion.descuento} + '%'"></td>
+				        <td>
+				            <span th:if="${promocion.eventoNombres.size() > 0}">
+				                <span th:each="eventoNombre, iterStat : ${promocion.eventoNombres}" th:text="${eventoNombre}" th:if="${!iterStat.last}">, </span>
+				                <span th:each="eventoNombre, iterStat : ${promocion.eventoNombres}" th:text="${eventoNombre}" th:if="${iterStat.last}"></span>
+				            </span>
+				            <span th:if="${promocion.eventoNombres.size() == 0}">Ninguno</span>
+				        </td>
+				        <td>
+				            <div class="d-flex d-md-inline-block">
+				                <a th:href="@{/promociones/edit/{id}(id=${promocion.id})}" class="btn btn-warning btn-sm btn-action mr-2">Editar</a>
+				                <a th:href="@{/promociones/delete/{id}(id=${promocion.id})}" class="btn btn-danger btn-sm btn-action"
+				                   onclick="return confirm('¿Estás seguro de que quieres eliminar esta promoción?');">Eliminar</a>
+				            </div>
+				        </td>
+				    </tr>
+				</tbody>
             </table>
         </div>
     </div>

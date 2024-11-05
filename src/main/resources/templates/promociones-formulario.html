@@ -88,7 +88,6 @@
                         <select id="eventosIds" th:field="*{eventosIds}" class="form-control" multiple>
                             <option th:each="evento : ${eventos}" th:value="${evento.id}" th:text="${evento.nombre}"></option>
                         </select>
-                        <small class="form-text text-muted">Selecciona uno o más eventos.</small>
                     </div>
                     <button type="submit" class="btn btn-success">Guardar</button>
                     <a href="/promociones/" class="btn btn-primary">Regresar</a>
