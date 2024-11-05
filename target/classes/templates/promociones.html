@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,6 +38,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Video de fondo -->
     <video autoplay muted loop class="video-background">
@@ -47,8 +49,10 @@
     <div class="container mt-5">
         <h1 class="mb-4">Promociones</h1>
         <div class="mb-3">
+			<th:block th:if="${esAdministrador}">
             <a href="/promociones/new" class="btn btn-primary">Nueva Promoción</a>
-            <a href="/" class="btn btn-secondary">Regresar</a>
+			</th:block>
+            <a href="/index" class="btn btn-secondary">Regresar</a>
         </div>
 
         <!-- Mensajes de éxito o error -->
@@ -67,30 +71,34 @@
                         <th>Descripción</th>
                         <th>Descuento (%)</th>
                         <th>Eventos</th>
-                        <th>Acciones</th>
+                        <th th:if="${esAdministrador}">Acciones</th>
                     </tr>
                 </thead>
-				<tbody th:each="promocion : ${promociones}">
-				    <tr>
-				        <td th:text="${promocion.nombre}"></td>
-				        <td th:text="${promocion.descripcion}"></td>
-				        <td th:text="${promocion.descuento} + '%'"></td>
-				        <td>
-				            <span th:if="${promocion.eventoNombres.size() > 0}">
-				                <span th:each="eventoNombre, iterStat : ${promocion.eventoNombres}" th:text="${eventoNombre}" th:if="${!iterStat.last}">, </span>
-				                <span th:each="eventoNombre, iterStat : ${promocion.eventoNombres}" th:text="${eventoNombre}" th:if="${iterStat.last}"></span>
-				            </span>
-				            <span th:if="${promocion.eventoNombres.size() == 0}">Ninguno</span>
-				        </td>
-				        <td>
-				            <div class="d-flex d-md-inline-block">
-				                <a th:href="@{/promociones/edit/{id}(id=${promocion.id})}" class="btn btn-warning btn-sm btn-action mr-2">Editar</a>
-				                <a th:href="@{/promociones/delete/{id}(id=${promocion.id})}" class="btn btn-danger btn-sm btn-action"
-				                   onclick="return confirm('¿Estás seguro de que quieres eliminar esta promoción?');">Eliminar</a>
-				            </div>
-				        </td>
-				    </tr>
-				</tbody>
+                <tbody th:each="promocion : ${promociones}">
+                    <tr>
+                        <td th:text="${promocion.nombre}"></td>
+                        <td th:text="${promocion.descripcion}"></td>
+                        <td th:text="${promocion.descuento} + '%'"></td>
+                        <td>
+                            <span th:if="${promocion.eventoNombres.size() > 0}">
+                                <span th:each="eventoNombre, iterStat : ${promocion.eventoNombres}"
+                                      th:text="${eventoNombre}" th:if="${!iterStat.last}">, </span>
+                                <span th:each="eventoNombre, iterStat : ${promocion.eventoNombres}"
+                                      th:text="${eventoNombre}" th:if="${iterStat.last}"></span>
+                            </span>
+                            <span th:if="${promocion.eventoNombres.size() == 0}">Ninguno</span>
+                        </td>
+                        <td th:if="${esAdministrador}">
+                            <div class="d-flex d-md-inline-block">
+                                <a th:href="@{/promociones/edit/{id}(id=${promocion.id})}"
+                                   class="btn btn-warning btn-sm btn-action mr-2">Editar</a>
+                                <a th:href="@{/promociones/delete/{id}(id=${promocion.id})}"
+                                   class="btn btn-danger btn-sm btn-action"
+                                   onclick="return confirm('¿Estás seguro de que quieres eliminar esta promoción?');">Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>
@@ -99,4 +107,5 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

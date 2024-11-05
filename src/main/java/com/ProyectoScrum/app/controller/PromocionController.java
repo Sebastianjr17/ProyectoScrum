@@ -14,7 +14,8 @@ import com.ProyectoScrum.app.entity.PromocionDTO;
 import com.ProyectoScrum.app.entity.Promocion;
 import com.ProyectoScrum.app.exception.NotFoundException;
 import com.ProyectoScrum.app.repository.PromocionRepository;
-import com.ProyectoScrum.app.repository.EventoRepository; // Asegúrate de tener este repositorio para eventos
+import com.ProyectoScrum.app.repository.EventoRepository;
+import com.ProyectoScrum.app.service.UsuarioService;
 
 @Controller
 @RequestMapping("/promociones")
@@ -24,14 +25,20 @@ public class PromocionController {
     private PromocionRepository promocionRepository;
 
     @Autowired
-    private EventoRepository eventoRepository; // Repositorio para acceder a los eventos
+    private EventoRepository eventoRepository;
+
+    @Autowired
+    private UsuarioService usuarioService; // Servicio para obtener el rol del usuario
 
     @GetMapping("/")
     public String listaPromociones(Model model) {
+        // Obtiene el rol actual desde el servicio
+        String rolUsuario = usuarioService.obtenerRolUsuarioActual();
+        model.addAttribute("esAdministrador", "admin".equals(rolUsuario)); // Verifica si es admin
+
         List<Promocion> promociones = promocionRepository.findAll();
-        List<Evento> eventos = eventoRepository.findAll(); // Obtener todos los eventos
+        List<Evento> eventos = eventoRepository.findAll();
         List<PromocionDTO> promocionesDTO = promociones.stream().map(promocion -> {
-            // Obtener los nombres de los eventos asociados a la promoción
             List<String> nombreEventos = promocion.getEventosIds().stream()
                 .map(eventoId -> eventos.stream()
                     .filter(evento -> evento.getId().equals(eventoId))
@@ -47,25 +54,33 @@ public class PromocionController {
         return "promociones";
     }
 
-
     @GetMapping("/new")
     public String nuevaPromocion(Model model) {
+        if (!"admin".equals(usuarioService.obtenerRolUsuarioActual())) {
+            return "redirect:/promociones/"; // Redirige si no es admin
+        }
         model.addAttribute("promocion", new Promocion());
-        model.addAttribute("eventos", eventoRepository.findAll()); // Obtener todos los eventos para el dropdown
+        model.addAttribute("eventos", eventoRepository.findAll()); // Obtener eventos para el dropdown
         return "promociones-formulario";
     }
 
     @GetMapping("/edit/{id}")
     public String editarPromocion(@PathVariable("id") String id, Model model) {
+        if (!"admin".equals(usuarioService.obtenerRolUsuarioActual())) {
+            return "redirect:/promociones/"; // Redirige si no es admin
+        }
         Promocion promocion = promocionRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Promocion no encontrada"));
+                .orElseThrow(() -> new NotFoundException("Promoción no encontrada"));
         model.addAttribute("promocion", promocion);
-        model.addAttribute("eventos", eventoRepository.findAll()); // También obtener eventos para el dropdown
+        model.addAttribute("eventos", eventoRepository.findAll()); // Obtener eventos para el dropdown
         return "promociones-formulario";
     }
 
     @PostMapping("/save")
     public String guardarPromocion(@ModelAttribute("promocion") Promocion promocion, RedirectAttributes redirectAttributes) {
+        if (!"admin".equals(usuarioService.obtenerRolUsuarioActual())) {
+            return "redirect:/promociones/"; // Redirige si no es admin
+        }
         promocionRepository.save(promocion);
         redirectAttributes.addFlashAttribute("successMessage", "Promoción guardada correctamente");
         return "redirect:/promociones/";
@@ -73,6 +88,9 @@ public class PromocionController {
 
     @GetMapping("/delete/{id}")
     public String eliminarPromocion(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
+        if (!"admin".equals(usuarioService.obtenerRolUsuarioActual())) {
+            return "redirect:/promociones/"; // Redirige si no es admin
+        }
         if (!promocionRepository.existsById(id)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Promoción no encontrada");
             return "redirect:/promociones/";
@@ -82,4 +100,3 @@ public class PromocionController {
         return "redirect:/promociones/";
     }
 }
-

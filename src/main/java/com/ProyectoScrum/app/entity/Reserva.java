@@ -7,8 +7,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Reserva {
     @Id
     private String id; // ID de la reserva
-    private String clienteId; // ID del cliente que realiza la reserva
-    private String eventoId;  // ID del evento para el que se realiza la reserva
+    private String nombre; // Nombre del cliente
+    private String correoElectronico; // Correo electrónico del cliente
+    private String telefono; // Teléfono del cliente
+    private String eventoId; // ID del evento para el que se realiza la reserva
     private int cantidadEntradas; // Cantidad de entradas reservadas
 
     // Getter y Setter para el ID
@@ -20,13 +22,31 @@ public class Reserva {
         this.id = id;
     }
 
-    // Getter y Setter para clienteId
-    public String getClienteId() {
-        return clienteId;
+    // Getter y Setter para nombre
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setClienteId(String clienteId) {
-        this.clienteId = clienteId;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    // Getter y Setter para correoElectronico
+    public String getCorreoElectronico() {
+        return correoElectronico;
+    }
+
+    public void setCorreoElectronico(String correoElectronico) {
+        this.correoElectronico = correoElectronico;
+    }
+
+    // Getter y Setter para telefono
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
     // Getter y Setter para eventoId
@@ -47,5 +67,4 @@ public class Reserva {
         this.cantidadEntradas = cantidadEntradas;
     }
 }
-
 

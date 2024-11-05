@@ -46,9 +46,13 @@
 
     <div class="container mt-5">
         <h1 class="mb-4">Salas</h1>
+
+        <!-- Botón Nueva Sala solo para administradores -->
         <div class="mb-3">
-            <a href="/salas/new" class="btn btn-primary">Nueva Sala</a>
-            <a href="/" class="btn btn-secondary">Regresar</a>
+            <th:block th:if="${esAdministrador}">
+                <a href="/salas/new" class="btn btn-primary">Nueva Sala</a>
+            </th:block>
+            <a href="/index" class="btn btn-secondary">Regresar</a>
         </div>
 
         <!-- Mensajes de éxito o error -->
@@ -66,7 +70,8 @@
                         <th>Nombre</th>
                         <th>Capacidad</th>
                         <th>Tipo</th>
-                        <th>Acciones</th>
+                        <!-- Solo mostrar columna de acciones si es administrador -->
+                        <th th:if="${esAdministrador}">Acciones</th>
                     </tr>
                 </thead>
                 <tbody th:each="sala : ${salas}">
@@ -74,7 +79,9 @@
                         <td th:text="${sala.nombre}"></td>
                         <td th:text="${sala.capacidad}"></td>
                         <td th:text="${sala.tipo}"></td>
-                        <td>
+                        
+                        <!-- Botones de acción solo para administradores -->
+                        <td th:if="${esAdministrador}">
                             <div class="d-flex d-md-inline-block">
                                 <a th:href="@{/salas/edit/{id}(id=${sala.id})}" class="btn btn-warning btn-sm btn-action mr-2">Editar</a>
                                 <a th:href="@{/salas/delete/{id}(id=${sala.id})}" class="btn btn-danger btn-sm btn-action"
@@ -92,3 +99,5 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+
