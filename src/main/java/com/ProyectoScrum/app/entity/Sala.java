@@ -1,7 +1,5 @@
 package com.ProyectoScrum.app.entity;
 
-import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,7 +10,7 @@ public class Sala {
     private String nombre;
     private int capacidad;
     private String tipo; // Tipo de sala (Ej: VIP, General)
-    private List<String> eventosIds; // Lista de IDs de eventos realizados en esta sala
+    private String imagenUrl; // URL o ruta de la imagen de la sala
 
     // Getter y Setter para 'id'
     public String getId() {
@@ -47,11 +45,11 @@ public class Sala {
         this.tipo = tipo;
     }
 
-    public List<String> getEventosIds() {
-        return eventosIds;
+    public String getImagenUrl() {
+        return imagenUrl;
     }
 
-    public void setEventosIds(List<String> eventosIds) {
-        this.eventosIds = eventosIds;
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
     }
 }

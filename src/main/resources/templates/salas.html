@@ -35,6 +35,14 @@
                 margin-bottom: 5px;
             }
         }
+
+        /* Estilos para la imagen en la tabla */
+        .sala-imagen {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -67,6 +75,7 @@
             <table class="table table-bordered table-dark">
                 <thead class="thead-light">
                     <tr>
+                        <th>Imagen</th>
                         <th>Nombre</th>
                         <th>Capacidad</th>
                         <th>Tipo</th>
@@ -76,6 +85,12 @@
                 </thead>
                 <tbody th:each="sala : ${salas}">
                     <tr>
+                        <!-- Columna para mostrar la imagen -->
+                        <td>
+                            <img th:src="${sala.imagenUrl}" alt="Imagen de la sala" class="sala-imagen"
+                                 th:if="${sala.imagenUrl}" />
+                            <span th:if="${sala.imagenUrl == null}">Sin imagen</span>
+                        </td>
                         <td th:text="${sala.nombre}"></td>
                         <td th:text="${sala.capacidad}"></td>
                         <td th:text="${sala.tipo}"></td>
