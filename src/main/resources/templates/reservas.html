@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservas</title>
-    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/5900/5900413.png" type="image/x-icon">
+	<link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/5900/5900413.png" type="image/x-icon">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         /* Ajustes para video de fondo */
@@ -47,7 +47,9 @@
     <div class="container mt-5">
         <h1 class="mb-4">Reservas</h1>
         <div class="mb-3">
-            <a href="/reservas/new" class="btn btn-primary">Nueva Reserva</a>
+            <th:block th:if="${esAdministrador}">
+                <a href="/reservas/new" class="btn btn-primary">Nueva Reserva</a>
+            </th:block>
             <a href="/index" class="btn btn-secondary">Regresar</a>
         </div>
         <div class="table-responsive">
@@ -58,7 +60,7 @@
                         <th>Teléfono</th> <!-- Asegúrate de que el DTO tenga este campo -->
                         <th>Evento</th>
                         <th>Cantidad Entradas</th>
-                        <th>Acciones</th>
+                        <th th:if="${esAdministrador}">Acciones</th>
                     </tr>
                 </thead>
                 <tbody th:each="reserva : ${reservas}">
@@ -67,7 +69,7 @@
                         <td th:text="${reserva.telefono}"></td> <!-- Asegúrate de que el DTO tenga el campo teléfono -->
                         <td th:text="${reserva.eventoNombre}"></td> <!-- Nombre del evento -->
                         <td th:text="${reserva.cantidadEntradas}"></td>
-                        <td>
+                        <td th:if="${esAdministrador}">
                             <div class="d-flex">
                                 <a th:href="@{/reservas/edit/{id}(id=${reserva.id})}" class="btn btn-warning btn-sm mr-2">Editar</a>
                                 <a th:href="@{/reservas/delete/{id}(id=${reserva.id})}" class="btn btn-danger btn-sm"
@@ -84,3 +86,4 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+
