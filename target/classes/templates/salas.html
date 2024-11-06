@@ -1,118 +1,124 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salas</title>
-    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/5900/5900413.png" type="image/x-icon">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        /* Ajustes para video de fondo */
-        .video-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Salas</title>
+	<link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/5900/5900413.png" type="image/x-icon">
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+		/* Ajustes para video de fondo */
+		.video-background {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			z-index: -1;
+		}
 
-        /* Fondo semitransparente para el contenido */
-        .container {
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 8px;
-            color: #fff;
-            z-index: 1;
-            position: relative;
-        }
+		/* Fondo semitransparente para el contenido */
+		.container {
+			background-color: rgba(0, 0, 0, 0.7);
+			padding: 20px;
+			border-radius: 8px;
+			color: #fff;
+			z-index: 1;
+			position: relative;
+		}
 
-        @media (max-width: 576px) {
-            .btn-action {
-                display: block;
-                width: 100%;
-                margin-bottom: 5px;
-            }
-        }
+		@media (max-width: 576px) {
+			.btn-action {
+				display: block;
+				width: 100%;
+				margin-bottom: 5px;
+			}
+		}
 
-        /* Estilos para la imagen en la tabla */
-        .sala-imagen {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
-    </style>
+		/* Estilos para la imagen en la tabla */
+		.sala-imagen {
+			width: 80px;
+			height: 80px;
+			object-fit: cover;
+			border-radius: 5px;
+		}
+	</style>
 </head>
+
 <body>
-    <!-- Video de fondo (opcional) -->
-    <video autoplay muted loop class="video-background">
-        <source th:src="@{/videos/mi-video.mp4}" type="video/mp4">
-        Tu navegador no soporta el elemento de video.
-    </video>
+	<!-- Video de fondo (opcional) -->
+	<video autoplay muted loop class="video-background">
+		<source th:src="@{/videos/mi-video.mp4}" type="video/mp4">
+		Tu navegador no soporta el elemento de video.
+	</video>
 
-    <div class="container mt-5">
-        <h1 class="mb-4">Salas</h1>
+	<div class="container mt-5">
+		<h1 class="mb-4">Salas</h1>
 
-        <!-- Botón Nueva Sala solo para administradores -->
-        <div class="mb-3">
-            <th:block th:if="${esAdministrador}">
-                <a href="/salas/new" class="btn btn-primary">Nueva Sala</a>
-            </th:block>
-            <a href="/index" class="btn btn-secondary">Regresar</a>
-        </div>
+		<!-- Botón Nueva Sala solo para administradores -->
+		<div class="mb-3">
+			<th:block th:if="${esAdministrador}">
+				<a href="/salas/new" class="btn btn-primary">Nueva Sala</a>
+			</th:block>
+			<a href="/index" class="btn btn-secondary">Regresar</a>
+		</div>
 
-        <!-- Mensajes de éxito o error -->
-        <div th:if="${successMessage}" class="alert alert-success">
-            <p th:text="${successMessage}"></p>
-        </div>
-        <div th:if="${errorMessage}" class="alert alert-danger">
-            <p th:text="${errorMessage}"></p>
-        </div>
+		<!-- Mensajes de éxito o error -->
+		<div th:if="${successMessage}" class="alert alert-success">
+			<p th:text="${successMessage}"></p>
+		</div>
+		<div th:if="${errorMessage}" class="alert alert-danger">
+			<p th:text="${errorMessage}"></p>
+		</div>
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-dark">
-                <thead class="thead-light">
-                    <tr>
-                        <th>Imagen</th>
-                        <th>Nombre</th>
-                        <th>Capacidad</th>
-                        <th>Tipo</th>
-                        <!-- Solo mostrar columna de acciones si es administrador -->
-                        <th th:if="${esAdministrador}">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody th:each="sala : ${salas}">
-                    <tr>
-                        <!-- Columna para mostrar la imagen -->
-                        <td>
-                            <img th:src="${sala.imagenUrl}" alt="Imagen de la sala" class="sala-imagen"
-                                 th:if="${sala.imagenUrl}" />
-                            <span th:if="${sala.imagenUrl == null}">Sin imagen</span>
-                        </td>
-                        <td th:text="${sala.nombre}"></td>
-                        <td th:text="${sala.capacidad}"></td>
-                        <td th:text="${sala.tipo}"></td>
-                        
-                        <!-- Botones de acción solo para administradores -->
-                        <td th:if="${esAdministrador}">
-                            <div class="d-flex d-md-inline-block">
-                                <a th:href="@{/salas/edit/{id}(id=${sala.id})}" class="btn btn-warning btn-sm btn-action mr-2">Editar</a>
-                                <a th:href="@{/salas/delete/{id}(id=${sala.id})}" class="btn btn-danger btn-sm btn-action"
-                                   onclick="return confirm('¿Estás seguro de que quieres eliminar esta sala?');">Eliminar</a>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+		<div class="table-responsive">
+			<table class="table table-bordered table-dark">
+				<thead class="thead-light">
+					<tr>
+						<th class="text-center">Imagen</th>
+						<th class="text-center">Nombre</th>
+						<th class="text-center">Capacidad</th>
+						<th class="text-center">Tipo</th>
+						<!-- Solo mostrar columna de acciones si es administrador -->
+						<th th:if="${esAdministrador}" class="text-center">Acciones</th>
+					</tr>
+				</thead>
+				<tbody th:each="sala : ${salas}">
+					<tr>
+						<!-- Columna para mostrar la imagen centrada -->
+						<td class="text-center">
+							<img th:src="${sala.imagenUrl}" alt="Imagen de la sala" class="sala-imagen"
+								th:if="${sala.imagenUrl}" />
+							<span th:if="${sala.imagenUrl == null}">Sin imagen</span>
+						</td>
+						<!-- Nombre centrado -->
+						<td class="text-center" th:text="${sala.nombre}"></td>
+						<!-- Capacidad centrada -->
+						<td class="text-center" th:text="${sala.capacidad}"></td>
+						<!-- Tipo centrado -->
+						<td class="text-center" th:text="${sala.tipo}"></td>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+						<!-- Botones de acción solo para administradores -->
+						<td th:if="${esAdministrador}" class="text-center">
+							<div class="d-flex d-md-inline-block">
+								<a th:href="@{/salas/edit/{id}(id=${sala.id})}"
+									class="btn btn-warning btn-sm btn-action mr-2">Editar</a>
+								<a th:href="@{/salas/delete/{id}(id=${sala.id})}"
+									class="btn btn-danger btn-sm btn-action"
+									onclick="return confirm('¿Estás seguro de que quieres eliminar esta sala?');">Eliminar</a>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
-
-
