@@ -29,11 +29,31 @@
 			position: relative;
 		}
 
+		/* Ajustes de responsividad para el formulario de búsqueda */
 		@media (max-width: 576px) {
-			.btn-action {
-				display: block;
+
+			/* Asegurarse de que el input ocupe todo el ancho */
+			.form-row .col-md-8 input {
 				width: 100%;
-				margin-bottom: 5px;
+				margin-bottom: 10px;
+				/* Añadir espacio entre el campo de texto y el botón */
+			}
+
+			/* Asegurarse de que el botón ocupe todo el ancho */
+			.form-row .col-md-4 button {
+				width: 100%;
+			}
+		}
+
+		@media (min-width: 577px) {
+
+			/* Solo si se está en un dispositivo mayor a 576px */
+			.col-md-8 input {
+				width: 100%;
+			}
+
+			.col-md-4 button {
+				width: 100%;
 			}
 		}
 	</style>
