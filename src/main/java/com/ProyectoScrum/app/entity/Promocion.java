@@ -1,20 +1,19 @@
 package com.ProyectoScrum.app.entity;
 
 import java.util.List;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "promociones")
 public class Promocion {
+
     @Id
     private String id;  // ID de la promoción
-    private String nombre;  // Nombre de la promoción
-    private String descripcion;  // Descripción de la promoción
-    private int descuento;  // Descuento aplicado (ahora es un entero)
-    private List<String> eventosIds; // Lista de IDs de eventos aplicables
+    private int descuento;  // Descuento aplicado
+    private List<String> bebidasIds; // Lista de IDs de bebidas aplicables
+    private Boolean activo; // Estado de la promoción (activo/inactivo)
 
-    // Getter y Setter para id
+    // Getters y Setters
     public String getId() {
         return id;
     }
@@ -23,36 +22,28 @@ public class Promocion {
         this.id = id;
     }
 
-    // Getters y Setters para otros campos
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
     public int getDescuento() {
-        return descuento; // Ahora retorna un int
+        return descuento;
     }
 
-    public void setDescuento(int descuento) { // Ahora acepta un int
+    public void setDescuento(int descuento) {
         this.descuento = descuento;
     }
 
-    public List<String> getEventosIds() {
-        return eventosIds;
+    public List<String> getBebidasIds() {
+        return bebidasIds;
     }
 
-    public void setEventosIds(List<String> eventosIds) {
-        this.eventosIds = eventosIds;
+    public void setBebidasIds(List<String> bebidasIds) {
+        this.bebidasIds = bebidasIds;
+    }
+
+    public Boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
     }
 }
+

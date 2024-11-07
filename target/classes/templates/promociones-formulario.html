@@ -5,7 +5,6 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Formulario Promoción</title>
-	<link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/5900/5900413.png" type="image/x-icon">
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 	<style>
 		/* Ajustes para video de fondo */
@@ -33,7 +32,6 @@
 			margin-top: 20px;
 			background-color: rgba(0, 0, 0, 0.7);
 			border: 1px solid #5cb85c;
-			/* Color de borde para resaltar */
 		}
 
 		.card-header {
@@ -62,37 +60,44 @@
 	<div class="container mt-5">
 		<div class="card">
 			<div class="card-header">
-				<h2 th:text="${promocion != null && promocion.id != null ? 'Editar Promoción' : 'Nueva Promoción'}">
-				</h2>
+				<h2 th:text="${promocion != null && promocion.id != null ? 'Editar Promoción' : 'Nueva Promoción'}"></h2>
 			</div>
 			<div class="card-body">
 				<form th:action="@{/promociones/save}" th:object="${promocion}" method="post">
 					<input type="hidden" th:if="${promocion.id != null}" th:field="*{id}" th:value="${promocion.id}" />
 					<div class="form-group">
-						<label for="nombre">Nombre</label>
-						<input type="text" id="nombre" class="form-control" th:field="*{nombre}" required />
+						<label for="bebidasIds">Seleccionar Productos</label>
+						<div>
+							<!-- Iteración de bebidas para crear un checkbox por cada bebida -->
+							<div th:each="bebida : ${bebidas}">
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" th:field="*{bebidasIds}" th:value="${bebida.id}" id="bebida-${bebida.id}">
+									<label class="form-check-label" for="bebida-${bebida.id}">
+										<span th:text="${bebida.nombre}"></span>
+									</label>
+								</div>
+							</div>
+						</div>
 					</div>
-					<div class="form-group">
-						<label for="descripcion">Descripción</label>
-						<textarea id="descripcion" class="form-control" th:field="*{descripcion}" required></textarea>
-					</div>
+
 					<div class="form-group">
 						<label for="descuento">Descuento (%)</label>
 						<div class="input-group">
-							<input type="number" id="descuento" class="form-control" th:field="*{descuento}" step="1"
-								min="0" value="10" required />
+							<input type="number" id="descuento" class="form-control" th:field="*{descuento}" step="1" min="0" value="10" required />
 							<div class="input-group-append">
 								<span class="input-group-text">%</span>
 							</div>
 						</div>
 					</div>
+
 					<div class="form-group">
-						<label for="eventosIds">Seleccionar Evento</label>
-						<select id="eventosIds" th:field="*{eventosIds}" class="form-control">
-							<option th:each="evento : ${eventos}" th:value="${evento.id}" th:text="${evento.nombre}">
-							</option>
+						<label for="activo">Estado de la Promoción</label>
+						<select id="activo" th:field="*{activo}" class="form-control">
+							<option value="true" th:selected="${promocion != null && promocion.activo != null && promocion.activo}">Activo</option>
+							<option value="false" th:selected="${promocion == null || promocion.activo == null || !promocion.activo}">Inactivo</option>
 						</select>
 					</div>
+
 					<button type="submit" class="btn btn-success">Guardar</button>
 					<a href="/promociones/" class="btn btn-primary">Regresar</a>
 				</form>
