@@ -55,36 +55,39 @@
 			<a th:href="@{/index}" class="btn btn-secondary">Regresar</a>
 		</div>
 		<div class="table-responsive">
-			<table class="table table-bordered table-dark">
-				<thead class="thead-light">
-					<tr>
-						<th class="text-center">Nombre</th>
-						<th class="text-center">Fecha</th>
-						<th class="text-center">Descripción</th>
-						<th class="text-center">Precio Entrada (COP)</th>
-						<th class="text-center">Sala</th> <!-- Nueva columna -->
-						<th th:if="${esAdministrador}" class="text-center">Acciones</th>
-					</tr>
-				</thead>
-				<tbody th:each="eventoDTO : ${eventos}">
-					<tr>
-						<td class="text-center" th:text="${eventoDTO.nombre}"></td>
-						<td class="text-center" th:text="${eventoDTO.fecha}"></td>
-						<td class="text-center" th:text="${eventoDTO.descripcion}"></td>
-						<td class="text-center" th:text="${eventoDTO.precioEntrada}"></td>
-						<td class="text-center" th:text="${eventoDTO.salaNombre}"></td>
+		    <table class="table table-bordered table-dark">
+		        <thead class="thead-light">
+		            <tr>
+		                <th class="text-center">Nombre</th>
+		                <th class="text-center">Fecha</th>
+		                <th class="text-center">Descripción</th>
+		                <th class="text-center">Precio Entrada (COP)</th>
+		                <th class="text-center">Sala</th>
+		                <th class="text-center">DJ</th> 
+		                <th th:if="${esAdministrador}" class="text-center">Acciones</th>
+		            </tr>
+		        </thead>
+		        <tbody th:each="eventoDTO : ${eventos}">
+		            <tr>
+		                <td class="text-center" th:text="${eventoDTO.nombre}"></td>
+		                <td class="text-center" th:text="${eventoDTO.fecha}"></td>
+		                <td class="text-center" th:text="${eventoDTO.descripcion}"></td>
+		                <td class="text-center" th:text="${eventoDTO.precioEntrada}"></td>
+		                <td class="text-center" th:text="${eventoDTO.salaNombre}"></td>
+		                <td class="text-center" th:text="${eventoDTO.djNombre}"></td> <!-- Display DJ's name -->
 						<td th:if="${esAdministrador}" class="text-center">
-							<div class="d-flex d-md-inline-block">
-								<a th:href="@{/eventos/edit/{id}(id=${eventoDTO.id})}"
-									class="btn btn-warning btn-sm btn-action mr-2">Editar</a>
-								<a th:href="@{/eventos/delete/{id}(id=${eventoDTO.id})}"
-									class="btn btn-danger btn-sm btn-action"
-									onclick="return confirm('¿Estás seguro de que quieres eliminar este evento?');">Eliminar</a>
-							</div>
+						    <div class="d-flex justify-content-center">
+						        <!-- Botón Editar con margen -->
+						        <a th:href="@{/eventos/edit/{id}(id=${eventoDTO.id})}" class="btn btn-warning btn-sm btn-action mr-3">Editar</a>
+						
+						        <!-- Botón Eliminar con margen -->
+						        <a th:href="@{/eventos/delete/{id}(id=${eventoDTO.id})}" class="btn btn-danger btn-sm btn-action"
+						           onclick="return confirm('¿Estás seguro de que quieres eliminar este evento?');">Eliminar</a>
+						    </div>
 						</td>
-					</tr>
-				</tbody>
-			</table>
+		            </tr>
+		        </tbody>
+		    </table>
 		</div>
 	</div>
 

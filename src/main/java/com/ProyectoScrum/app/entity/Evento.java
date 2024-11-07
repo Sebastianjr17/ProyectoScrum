@@ -10,12 +10,13 @@ public class Evento {
     @Id
     private String id;
     private String nombre;
-    private String fecha; // Puedes usar LocalDate si prefieres
+    private String fecha;
     private String descripcion;
-    private BigDecimal precioEntrada; // Cambiado a BigDecimal para manejar precios
-    private String salaId; // ID de la sala asociada
+    private BigDecimal precioEntrada;
+    private String salaId;
+    private String djId; // New field to store the DJ's ID
 
-    // Getters y Setters
+    // Getters and Setters
     public String getId() {
         return id;
     }
@@ -49,7 +50,7 @@ public class Evento {
     }
 
     public BigDecimal getPrecioEntrada() {
-        return precioEntrada != null ? precioEntrada : BigDecimal.ZERO; // Retorna 0 si es null
+        return precioEntrada != null ? precioEntrada : BigDecimal.ZERO;
     }
 
     public void setPrecioEntrada(BigDecimal precioEntrada) {
@@ -62,5 +63,13 @@ public class Evento {
 
     public void setSalaId(String salaId) {
         this.salaId = salaId;
+    }
+
+    public String getDjId() {
+        return djId;
+    }
+
+    public void setDjId(String djId) {
+        this.djId = djId;
     }
 }

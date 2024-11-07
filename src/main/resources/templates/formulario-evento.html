@@ -85,12 +85,19 @@
                     <div class="form-group">
                         <label for="salaId">Sala</label>
                         <select class="form-control" th:field="*{salaId}" required>
-                            <option value="" disabled selected>Seleccione una sala</option>
                             <th:block th:each="sala : ${salas}">
                                 <option th:value="${sala.id}" th:text="${sala.nombre}"></option>
                             </th:block>
                         </select>
                     </div>
+					<div class="form-group">
+					    <label for="djId">DJ</label>
+					    <select class="form-control" th:field="*{djId}" required>
+					        <th:block th:each="dj : ${djs}">
+					            <option th:value="${dj.id}" th:text="${dj.nombre}"></option>
+					        </th:block>
+					    </select>
+					</div>
                     <button type="submit" class="btn btn-custom">Guardar</button>
                     <a th:href="@{/eventos/}" class="btn btn-primary">Regresar</a>
                 </form>
