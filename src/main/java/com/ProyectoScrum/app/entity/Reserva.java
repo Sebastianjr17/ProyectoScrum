@@ -12,6 +12,7 @@ public class Reserva {
     private String telefono; // Teléfono del cliente
     private String eventoId; // ID del evento para el que se realiza la reserva
     private int cantidadEntradas; // Cantidad de entradas reservadas
+    private boolean asistenciaMarcada = false; // Indica si la asistencia ha sido marcada, por defecto en false
 
     // Getter y Setter para el ID
     public String getId() {
@@ -66,5 +67,13 @@ public class Reserva {
     public void setCantidadEntradas(int cantidadEntradas) {
         this.cantidadEntradas = cantidadEntradas;
     }
-}
 
+    // Getter y Setter para asistenciaMarcada
+    public boolean isAsistenciaMarcada() {
+        return asistenciaMarcada;
+    }
+
+    public void setAsistenciaMarcada(boolean asistenciaMarcada) {
+        this.asistenciaMarcada = asistenciaMarcada;
+    }
+}

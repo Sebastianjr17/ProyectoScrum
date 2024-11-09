@@ -49,7 +49,7 @@
     <div class="container mt-5">
         <h1 class="mb-4">Promociones</h1>
         <div class="mb-3">
-            <th:block th:if="${esAdministrador}">
+            <th:block th:if="${esBarman}">
                 <a href="/promociones/new" class="btn btn-primary">Nueva Promoción</a>
             </th:block>
             <a href="/index" class="btn btn-secondary">Regresar</a>
@@ -70,7 +70,7 @@
                         <th class="text-center">Productos</th>
                         <th class="text-center">Descuento (%)</th>
                         <th class="text-center">Estado</th>
-                        <th th:if="${esAdministrador}" class="text-center">Acciones</th>
+                        <th th:if="${esBarman}" class="text-center">Acciones</th>
                     </tr>
                 </thead>
                 <tbody th:each="promocion : ${promociones}">
@@ -87,7 +87,7 @@
                         </td>
                         <td class="text-center" th:text="${promocion.descuento} + '%'"></td>
                         <td class="text-center" th:text="${promocion.activo != null ? (promocion.activo ? 'Activo' : 'Inactivo') : 'Inactivo'}"></td>
-                        <td th:if="${esAdministrador}" class="text-center">
+                        <td th:if="${esBarman}" class="text-center">
                             <div class="d-flex d-md-inline-block">
                                 <a th:href="@{/promociones/edit/{id}(id=${promocion.id})}" class="btn btn-warning btn-sm btn-action mr-2">Editar</a>
                                 <a th:href="@{/promociones/delete/{id}(id=${promocion.id})}" class="btn btn-danger btn-sm btn-action"
@@ -106,4 +106,3 @@
 </body>
 
 </html>
-
