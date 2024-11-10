@@ -2,145 +2,155 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservas | EnigmaDisco</title>
-    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/5900/5900413.png" type="image/x-icon">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .video-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Reservas | EnigmaDisco</title>
+	<link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/5900/5900413.png" type="image/x-icon">
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+		.video-background {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			z-index: -1;
+		}
 
-        .container {
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 30px;
-            border-radius: 8px;
-            color: #fff;
-            z-index: 1;
-            position: relative;
-        }
+		.container {
+			background-color: rgba(0, 0, 0, 0.7);
+			padding: 30px;
+			border-radius: 8px;
+			color: #fff;
+			z-index: 1;
+			position: relative;
+		}
 
-        /* Añadir margen inferior a los formularios */
-        .form-group {
-            margin-bottom: 20px;
-        }
+		/* Añadir margen inferior a los formularios */
+		.form-group {
+			margin-bottom: 20px;
+		}
 
-        /* Asegurar que los botones tengan un poco de separación */
-        .btn-spacing {
-            margin-right: 10px;
-            margin-bottom: 10px;
-        }
+		/* Asegurar que los botones tengan un poco de separación */
+		.btn-spacing {
+			margin-right: 10px;
+			margin-bottom: 10px;
+		}
 
-        /* Ajustar el tamaño y espaciado de los botones en pantallas pequeñas */
-        @media (max-width: 768px) {
-            .btn-spacing {
-                width: 100%;
-                margin-bottom: 10px;
-            }
+		/* Ajustar el tamaño y espaciado de los botones en pantallas pequeñas */
+		@media (max-width: 768px) {
+			.btn-spacing {
+				width: 100%;
+				margin-bottom: 10px;
+			}
 
-            .form-row {
-                flex-direction: column;
-            }
+			.form-row {
+				flex-direction: column;
+			}
 
-            .form-control {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-        }
-    </style>
+			.form-control {
+				width: 100%;
+				margin-bottom: 10px;
+			}
+		}
+	</style>
 </head>
 
 <body>
-    <video autoplay muted loop class="video-background">
-        <source src="/videos/mi-video.mp4" type="video/mp4">
-        Tu navegador no soporta el elemento de video.
-    </video>
+	<video autoplay muted loop class="video-background">
+		<source src="/videos/mi-video.mp4" type="video/mp4">
+		Tu navegador no soporta el elemento de video.
+	</video>
 
-    <div class="container mt-5">
-        <h1 class="mb-4">Reservas</h1>
+	<div class="container mt-5">
+		<h1 class="mb-4">Reservas</h1>
 
-        <!-- Formulario de búsqueda solo visible para clientes -->
-        <div th:if="${esCliente}">
-            <form action="/reservas/" method="get" class="mb-4">
-                <div class="form-row">
-                    <div class="col-md-8">
-                        <input type="text" name="correo" class="form-control" placeholder="Correo Electrónico" th:value="${correo}">
-                    </div>
-                    <div class="col-md-4">
-                        <button type="submit" class="btn btn-primary btn-block">Buscar</button>
-                    </div>
-                </div>
-            </form>
-            <div class="mb-3">
-                <a href="/reservas/new" class="btn btn-primary btn-spacing">Reservar</a>
-            </div>
-        </div>
+		<!-- Formulario de búsqueda solo visible para clientes -->
+		<div th:if="${esCliente}">
+			<form action="/reservas/" method="get" class="mb-4">
+				<div class="form-row">
+					<div class="col-md-8">
+						<input type="text" name="correo" class="form-control" placeholder="Correo Electrónico"
+							th:value="${correo}">
+					</div>
+					<div class="col-md-4">
+						<button type="submit" class="btn btn-primary btn-block">Buscar</button>
+					</div>
+				</div>
+			</form>
+			<div class="mb-3">
+				<a href="/reservas/new" class="btn btn-primary btn-spacing">Reservar</a>
+			</div>
+		</div>
 
-        <!-- Botón de regresar siempre visible -->
-        <div class="mb-3">
-            <a href="/index" class="btn btn-secondary btn-spacing">Regresar</a>
-        </div>
+		<!-- Botón de regresar siempre visible -->
+		<div class="mb-3">
+			<a href="/index" class="btn btn-secondary btn-spacing">Regresar</a>
+		</div>
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-dark">
-                <thead class="thead-light">
-                    <tr>
-                        <th class="text-center">Nombre</th>
-                        <th class="text-center">Correo Electrónico</th>
-                        <th class="text-center">Teléfono</th>
-                        <th class="text-center">Evento</th>
-                        <th class="text-center">Cantidad Entradas</th>
-                        <th class="text-center">Asistencia</th>
+		<div class="table-responsive">
+			<table class="table table-bordered table-dark">
+				<thead class="thead-light">
+					<tr>
+						<th class="text-center">Nombre</th>
+						<th class="text-center">Correo Electrónico</th>
+						<th class="text-center">Teléfono</th>
+						<th class="text-center">Evento</th>
+						<th class="text-center">Cantidad Entradas</th>
+						<th class="text-center">Asistencia</th>
 
-                        <!-- Solo mostrar la columna de Acciones si es recepcionista -->
-                        <th class="text-center" th:if="${esRecepcionista}">Acciones</th>                 
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="reserva : ${reservas}">
-                        <td class="text-center" th:text="${reserva.clienteNombre}"></td>
-                        <td class="text-center" th:text="${reserva.clienteCorreo}"></td>
-                        <td class="text-center" th:text="${reserva.telefono}"></td>
-                        <td class="text-center" th:text="${reserva.eventoNombre}"></td>
-                        <td class="text-center" th:text="${reserva.cantidadEntradas}"></td>
+						<!-- Solo mostrar la columna de Acciones si es recepcionista -->
+						<th class="text-center" th:if="${esRecepcionista}">Acciones</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="reserva : ${reservas}">
+						<td class="text-center" th:text="${reserva.clienteNombre}"></td>
+						<td class="text-center" th:text="${reserva.clienteCorreo}"></td>
+						<td class="text-center" th:text="${reserva.telefono}"></td>
+						<td class="text-center" th:text="${reserva.eventoNombre}"></td>
+						<td class="text-center" th:text="${reserva.cantidadEntradas}"></td>
 
-                        <!-- Mostrar el estado de asistencia para todos los roles -->
-                        <td class="text-center">
-                            <span th:text="${reserva.asistenciaMarcada ? 'Asistió' : 'No Asistió'}"></span>
-                        </td>
+						<!-- Mostrar el estado de asistencia para todos los roles -->
+						<td class="text-center">
+							<span th:text="${reserva.asistenciaMarcada ? 'Asistió' : 'No Asistió'}"></span>
+						</td>
 
-                        <!-- Mostrar las acciones solo si es recepcionista -->
-                        <td class="text-center" th:if="${esRecepcionista}">
-                            <form th:action="@{/reservas/asistencia/{id}(id=${reserva.id})}" method="post" style="display:inline;">
-                                <button type="submit" class="btn btn-success btn-sm"
-                                        th:disabled="${reserva.asistenciaMarcada}">
-                                    <span th:text="${reserva.asistenciaMarcada ? 'Asistió' : 'Marcar Asistencia'}"></span>
-                                </button>
-                            </form>
-                            <form th:action="@{/reservas/noAsistencia/{id}(id=${reserva.id})}" method="post" style="display:inline;">
-                                <button type="submit" class="btn btn-danger btn-sm"
-                                        th:disabled="${!reserva.asistenciaMarcada}">
-                                    <span th:text="${!reserva.asistenciaMarcada ? 'No Asistió' : 'Marcar No Asistencia'}"></span>
-                                </button>
-                            </form>
-                        </td>                       
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+						<!-- Mostrar las acciones solo si es recepcionista -->
+						<td class="text-center" th:if="${esRecepcionista}">
+							<div class="d-flex justify-content-between">
+								<!-- Formulario para Marcar Asistencia -->
+								<form th:action="@{/reservas/asistencia/{id}(id=${reserva.id})}" method="post"
+									class="mr-2">
+									<button type="submit" class="btn btn-success btn-sm"
+										th:disabled="${reserva.asistenciaMarcada}">
+										<span
+											th:text="${reserva.asistenciaMarcada ? 'Asistió' : 'Marcar Asistencia'}"></span>
+									</button>
+								</form>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+								<!-- Formulario para Marcar No Asistencia -->
+								<form th:action="@{/reservas/noAsistencia/{id}(id=${reserva.id})}" method="post"
+									class="ml-2">
+									<button type="submit" class="btn btn-danger btn-sm"
+										th:disabled="${!reserva.asistenciaMarcada}">
+										<span
+											th:text="${!reserva.asistenciaMarcada ? 'No Asistió' : 'Marcar No Asistencia'}"></span>
+									</button>
+								</form>
+							</div>
+						</td>
+
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
-
