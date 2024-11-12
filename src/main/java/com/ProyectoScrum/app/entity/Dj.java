@@ -10,6 +10,9 @@ public class Dj {
     private String nombre;
     private String correoElectronico;
     private String telefono;
+    private String estiloMusical; // Estilo de música que mezcla o produce
+    private String ubicacion; // Ubicación geográfica
+    private String spotify;  // Enlace a Spotify
 
     // Getter para id
     public String getId() {
@@ -43,5 +46,29 @@ public class Dj {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public String getEstiloMusical() {
+        return estiloMusical;
+    }
+
+    public void setEstiloMusical(String estiloMusical) {
+        this.estiloMusical = estiloMusical;
+    }
+
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
+    public String getSpotify() {
+        return spotify;
+    }
+
+    public void setSpotify(String spotify) {
+        this.spotify = spotify;
     }
 }

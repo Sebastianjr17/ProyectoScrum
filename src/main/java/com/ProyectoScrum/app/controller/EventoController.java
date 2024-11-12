@@ -22,105 +22,100 @@ import java.util.stream.Collectors;
 @RequestMapping("/eventos")
 public class EventoController {
 
-    @Autowired
-    private EventoRepository eventoRepository;
+	@Autowired
+	private EventoRepository eventoRepository;
 
-    @Autowired
-    private SalaRepository salaRepository;
+	@Autowired
+	private SalaRepository salaRepository;
 
-    @Autowired
-    private DjRepository djRepository; // Inject DjRepository
+	@Autowired
+	private DjRepository djRepository; // Inject DjRepository
 
-    @Autowired
-    private UsuarioService usuarioService;
+	@Autowired
+	private UsuarioService usuarioService;
 
-    @GetMapping("/")
-    public String listaEventos(Model model) {
-        // Obtiene el rol actual desde el servicio
-        String rolUsuario = usuarioService.obtenerRolUsuarioActual();
-        model.addAttribute("esAdministrador", "admin".equals(rolUsuario)); // Verifica si es admin
+	@GetMapping("/")
+	public String listaEventos(Model model) {
+		// Obtiene el rol actual desde el servicio
+		String rolUsuario = usuarioService.obtenerRolUsuarioActual();
+		model.addAttribute("esAdministrador", "admin".equals(rolUsuario)); // Verifica si es admin
 
-        // Obtiene la lista de eventos
-        List<Evento> eventos = eventoRepository.findAll();
+		// Obtiene la lista de eventos
+		List<Evento> eventos = eventoRepository.findAll();
 
-        // Convierte los eventos a DTOs
-        List<EventoDTO> eventoDTOs = eventos.stream().map(evento -> {
-            // Obtiene el nombre de la sala usando el ID de la sala
-            Sala sala = salaRepository.findById(evento.getSalaId()).orElse(null);
-            String salaNombre = (sala != null) ? sala.getNombre() : "Sala no disponible";
+		// Convierte los eventos a DTOs
+		List<EventoDTO> eventoDTOs = eventos.stream().map(evento -> {
+			// Obtiene el nombre de la sala usando el ID de la sala
+			Sala sala = salaRepository.findById(evento.getSalaId()).orElse(null);
+			String salaNombre = (sala != null) ? sala.getNombre() : "Sala no disponible";
 
-            // Obtiene el nombre del DJ usando el ID del DJ
-            Dj dj = djRepository.findById(evento.getDjId()).orElse(null);
-            String djNombre = (dj != null) ? dj.getNombre() : "DJ no asignado";
+			// Obtiene el nombre del DJ usando el ID del DJ
+			Dj dj = djRepository.findById(evento.getDjId()).orElse(null);
+			String djNombre = (dj != null) ? dj.getNombre() : "DJ no asignado";
 
-            // Crea un DTO para el evento
-            return new EventoDTO(
-                evento.getId(), 
-                evento.getNombre(), 
-                evento.getFecha(), 
-                evento.getDescripcion(),
-                evento.getPrecioEntrada(), // Se pasa directamente como BigDecimal
-                salaNombre, 
-                djNombre // Pass the DJ name to EventoDTO
-            );
-        }).collect(Collectors.toList());
+			// Crea un DTO para el evento
+			return new EventoDTO(evento.getId(), evento.getNombre(), evento.getFecha(), evento.getDescripcion(),
+					evento.getPrecioEntrada(), // Se pasa directamente como BigDecimal
+					salaNombre, djNombre // Pass the DJ name to EventoDTO
+			);
+		}).collect(Collectors.toList());
 
-        model.addAttribute("eventos", eventoDTOs);
-        return "eventos"; // Asegúrate de que este archivo exista en templates
-    }
+		model.addAttribute("eventos", eventoDTOs);
+		return "eventos"; // Asegúrate de que este archivo exista en templates
+	}
 
-    @GetMapping("/new")
-    public String nuevoEvento(Model model) {
-        // Permite solo a los administradores acceder
-        if (!"admin".equals(usuarioService.obtenerRolUsuarioActual())) {
-            return "redirect:/eventos/"; // Redirige si no es admin
-        }
-        List<Sala> salas = salaRepository.findAll();
-        List<Dj> djs = djRepository.findAll(); // Get the list of DJs for the form
-        model.addAttribute("salas", salas);
-        model.addAttribute("djs", djs); // Add DJs to the model
-        model.addAttribute("evento", new Evento());
-        return "formulario-evento"; // Asegúrate de que este archivo exista en templates
-    }
+	@GetMapping("/new")
+	public String nuevoEvento(Model model) {
+		// Permite solo a los administradores acceder
+		if (!"admin".equals(usuarioService.obtenerRolUsuarioActual())) {
+			return "redirect:/eventos/"; // Redirige si no es admin
+		}
+		List<Sala> salas = salaRepository.findAll();
+		List<Dj> djs = djRepository.findAll(); // Get the list of DJs for the form
+		model.addAttribute("salas", salas);
+		model.addAttribute("djs", djs); // Add DJs to the model
+		model.addAttribute("evento", new Evento());
+		return "formulario-evento"; // Asegúrate de que este archivo exista en templates
+	}
 
-    @GetMapping("/edit/{id}")
-    public String editarEvento(@PathVariable("id") String id, Model model, RedirectAttributes redirectAttributes) {
-        if (!"admin".equals(usuarioService.obtenerRolUsuarioActual())) {
-            return "redirect:/eventos/"; // Redirige si no es admin
-        }
-        Evento evento = eventoRepository.findById(id).orElseThrow(() -> {
-            redirectAttributes.addFlashAttribute("error", "Evento no encontrado");
-            return new NotFoundException("Evento no encontrado");
-        });
-        List<Sala> salas = salaRepository.findAll();
-        List<Dj> djs = djRepository.findAll(); // Fetch all DJs for selection
-        model.addAttribute("salas", salas);
-        model.addAttribute("djs", djs); // Add DJs to the model
-        model.addAttribute("evento", evento);
-        return "formulario-evento";
-    }
+	@GetMapping("/edit/{id}")
+	public String editarEvento(@PathVariable("id") String id, Model model, RedirectAttributes redirectAttributes) {
+		if (!"admin".equals(usuarioService.obtenerRolUsuarioActual())) {
+			return "redirect:/eventos/"; // Redirige si no es admin
+		}
+		Evento evento = eventoRepository.findById(id).orElseThrow(() -> {
+			redirectAttributes.addFlashAttribute("error", "Evento no encontrado");
+			return new NotFoundException("Evento no encontrado");
+		});
+		List<Sala> salas = salaRepository.findAll();
+		List<Dj> djs = djRepository.findAll(); // Fetch all DJs for selection
+		model.addAttribute("salas", salas);
+		model.addAttribute("djs", djs); // Add DJs to the model
+		model.addAttribute("evento", evento);
+		return "formulario-evento";
+	}
 
-    @PostMapping("/save")
-    public String guardarEvento(@ModelAttribute("evento") Evento evento, RedirectAttributes redirectAttributes) {
-        if (!"admin".equals(usuarioService.obtenerRolUsuarioActual())) {
-            return "redirect:/eventos/"; // Redirige si no es admin
-        }
-        eventoRepository.save(evento);
-        redirectAttributes.addFlashAttribute("mensaje", "Evento guardado exitosamente!");
-        return "redirect:/eventos/";
-    }
+	@PostMapping("/save")
+	public String guardarEvento(@ModelAttribute("evento") Evento evento, RedirectAttributes redirectAttributes) {
+		if (!"admin".equals(usuarioService.obtenerRolUsuarioActual())) {
+			return "redirect:/eventos/"; // Redirige si no es admin
+		}
+		eventoRepository.save(evento);
+		redirectAttributes.addFlashAttribute("mensaje", "Evento guardado exitosamente!");
+		return "redirect:/eventos/";
+	}
 
-    @GetMapping("/delete/{id}")
-    public String eliminarEvento(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
-        if (!"admin".equals(usuarioService.obtenerRolUsuarioActual())) {
-            return "redirect:/eventos/"; // Redirige si no es admin
-        }
-        if (eventoRepository.existsById(id)) {
-            eventoRepository.deleteById(id);
-            redirectAttributes.addFlashAttribute("mensaje", "Evento eliminado exitosamente!");
-        } else {
-            redirectAttributes.addFlashAttribute("error", "Evento no encontrado!");
-        }
-        return "redirect:/eventos/";
-    }
+	@GetMapping("/delete/{id}")
+	public String eliminarEvento(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
+		if (!"admin".equals(usuarioService.obtenerRolUsuarioActual())) {
+			return "redirect:/eventos/"; // Redirige si no es admin
+		}
+		if (eventoRepository.existsById(id)) {
+			eventoRepository.deleteById(id);
+			redirectAttributes.addFlashAttribute("mensaje", "Evento eliminado exitosamente!");
+		} else {
+			redirectAttributes.addFlashAttribute("error", "Evento no encontrado!");
+		}
+		return "redirect:/eventos/";
+	}
 }

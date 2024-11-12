@@ -7,8 +7,8 @@
 	<title>Formulario DJ</title>
 	<link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/5900/5900413.png" type="image/x-icon">
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 	<style>
-		/* Ajustes para video de fondo */
 		.video-background {
 			position: fixed;
 			top: 0;
@@ -19,9 +19,8 @@
 			z-index: -1;
 		}
 
-		/* Fondo semitransparente para el contenido */
 		.container {
-			background-color: rgba(0, 0, 0, 0.7);
+			background-color: rgba(0, 0, 0, 0.8);
 			padding: 20px;
 			border-radius: 8px;
 			color: #fff;
@@ -31,7 +30,7 @@
 
 		.card {
 			margin-top: 20px;
-			background-color: rgba(0, 0, 0, 0.7);
+			background-color: rgba(0, 0, 0, 0.8);
 			border: 1px solid #5cb85c;
 		}
 
@@ -48,13 +47,21 @@
 		.btn-custom:hover {
 			background-color: #4cae4c;
 		}
+
+		.social-input {
+			display: flex;
+			align-items: center;
+		}
+
+		.social-input i {
+			margin-right: 10px;
+		}
 	</style>
 </head>
 
 <body>
-	<!-- Video de fondo -->
 	<video autoplay muted loop class="video-background">
-		<source th:src="@{/videos/mi-video.mp4}" type="video/mp4">
+		<source src="/videos/mi-video.mp4" type="video/mp4">
 		Tu navegador no soporta el elemento de video.
 	</video>
 
@@ -66,21 +73,49 @@
 			<div class="card-body">
 				<form th:action="@{/djs/save}" th:object="${dj}" method="post">
 					<input type="hidden" th:if="${dj.id != null}" th:field="*{id}" th:value="${dj.id}" />
+
 					<div class="form-group">
 						<label for="nombre">Nombre</label>
-						<input type="text" id="nombre" class="form-control" th:name="nombre"
-							th:value="${dj.nombre}" required>
+						<input type="text" id="nombre" name="nombre" class="form-control" th:field="*{nombre}" required>
 					</div>
+
 					<div class="form-group">
 						<label for="correoElectronico">Correo Electrónico</label>
-						<input type="email" id="correoElectronico" class="form-control" th:name="correoElectronico"
-							th:value="${dj.correoElectronico}" required>
+						<input type="email" id="correoElectronico" name="correoElectronico" class="form-control"
+							th:field="*{correoElectronico}" required>
 					</div>
+
 					<div class="form-group">
 						<label for="telefono">Teléfono</label>
-						<input type="tel" id="telefono" class="form-control" th:name="telefono"
-							th:value="${dj.telefono}" required pattern="\d{10}">
+						<input type="tel" id="telefono" name="telefono" class="form-control" th:field="*{telefono}"
+							required pattern="\d{10}">
 					</div>
+					<!-- Campo Estilo Musical -->
+					<div class="form-group">
+						<label for="estiloMusical">Estilo Musical</label>
+						<input type="text" id="estiloMusical" name="estiloMusical" class="form-control"
+							th:field="*{estiloMusical}" required>
+					</div>
+
+					<div class="form-group">
+						<label for="ubicacion">Ubicación</label>
+						<select id="ubicacion" name="ubicacion" class="form-control" th:field="*{ubicacion}" required>
+							<option value="Argentina" th:selected="${dj.ubicacion == 'Argentina'}">Argentina</option>
+							<option value="Chile" th:selected="${dj.ubicacion == 'Chile'}">Chile</option>
+							<option value="México" th:selected="${dj.ubicacion == 'México'}">México</option>
+							<option value="Colombia" th:selected="${dj.ubicacion == 'Colombia'}">Colombia</option>
+							<option value="Perú" th:selected="${dj.ubicacion == 'Perú'}">Perú</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="spotify" class="social-input">
+							<i class="fab fa-spotify"></i> Spotify
+						</label>
+						<input type="url" id="spotify" name="spotify" class="form-control" th:field="*{spotify}"
+							required>
+					</div>
+
 					<button type="submit" class="btn btn-success">Guardar</button>
 					<a href="/djs/" class="btn btn-primary">Regresar</a>
 				</form>

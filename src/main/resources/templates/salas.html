@@ -44,6 +44,22 @@
 			object-fit: cover;
 			border-radius: 5px;
 		}
+
+		/* Colores para el estado de disponibilidad */
+		.estado-disponible {
+			color: green;
+			font-weight: bold;
+		}
+
+		.estado-ocupado {
+			color: red;
+			font-weight: bold;
+		}
+
+		.estado-mantenimiento {
+			color: gray;
+			font-weight: bold;
+		}
 	</style>
 </head>
 
@@ -81,16 +97,16 @@
 						<th class="text-center">Nombre</th>
 						<th class="text-center">Capacidad</th>
 						<th class="text-center">Tipo</th>
-						<!-- Solo mostrar columna de acciones si es administrador -->
-						<th th:if="${esAdministrador}" class="text-center">Acciones</th>
+						<th class="text-center">Estado</th> <!-- Nueva columna para el estado -->
+						<!-- Solo mostrar columna de acciones si es administrador o recepcionista -->
+						<th th:if="${esAdministrador or esRecepcionista}" class="text-center">Acciones</th>
 					</tr>
 				</thead>
 				<tbody th:each="sala : ${salas}">
 					<tr>
 						<!-- Columna para mostrar la imagen centrada -->
 						<td class="text-center">
-							<img th:src="${sala.imagenUrl}" alt="Imagen de la sala" class="sala-imagen"
-								th:if="${sala.imagenUrl}" />
+							<img th:src="${sala.imagenUrl}" alt="Imagen de la sala" class="sala-imagen" th:if="${sala.imagenUrl}" />
 							<span th:if="${sala.imagenUrl == null}">Sin imagen</span>
 						</td>
 						<!-- Nombre centrado -->
@@ -99,15 +115,13 @@
 						<td class="text-center" th:text="${sala.capacidad}"></td>
 						<!-- Tipo centrado -->
 						<td class="text-center" th:text="${sala.tipo}"></td>
-
-						<!-- Botones de acción solo para administradores -->
-						<td th:if="${esAdministrador}" class="text-center">
+						<!-- Estado centrado con colores -->
+						<td class="text-center" th:text="${sala.estado}"></td>
+						<!-- Botones de acción solo para administradores o recepcionistas -->
+						<td th:if="${esAdministrador or esRecepcionista}" class="text-center">
 							<div class="d-flex d-md-inline-block">
-								<a th:href="@{/salas/edit/{id}(id=${sala.id})}"
-									class="btn btn-warning btn-sm btn-action mr-2">Editar</a>
-								<a th:href="@{/salas/delete/{id}(id=${sala.id})}"
-									class="btn btn-danger btn-sm btn-action"
-									onclick="return confirm('¿Estás seguro de que quieres eliminar esta sala?');">Eliminar</a>
+								<a th:href="@{/salas/edit/{id}(id=${sala.id})}" class="btn btn-warning btn-sm btn-action mr-2">Editar</a>
+								<a th:href="@{/salas/delete/{id}(id=${sala.id})}" class="btn btn-danger btn-sm btn-action" onclick="return confirm('¿Estás seguro de que quieres eliminar esta sala?');">Eliminar</a>
 							</div>
 						</td>
 					</tr>
@@ -122,3 +136,4 @@
 </body>
 
 </html>
+
