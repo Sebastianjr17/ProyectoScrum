@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.ProyectoScrum.app.ProyectoScrumApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.091 s -- in com.ProyectoScrum.app.ProyectoScrumApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.520 s -- in com.ProyectoScrum.app.ProyectoScrumApplicationTests
