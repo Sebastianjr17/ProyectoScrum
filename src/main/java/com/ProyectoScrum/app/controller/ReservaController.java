@@ -35,9 +35,10 @@ public class ReservaController {
 		return "cliente".equals(usuarioService.obtenerRolUsuarioActual());
 	}
 
-	// Verifica si el usuario es administrador
-	private boolean esAdministrador() {
-		return "admin".equals(usuarioService.obtenerRolUsuarioActual());
+	// Verifica si el usuario es administrador o barman
+	private boolean esAdminOBarman() {
+		String rol = usuarioService.obtenerRolUsuarioActual();
+		return "admin".equals(rol) || "barman".equals(rol);
 	}
 
 	// Verifica si el usuario es recepcionista
@@ -50,15 +51,14 @@ public class ReservaController {
 	public String listaReservas(@RequestParam(value = "correo", required = false) String correo, Model model) {
 		List<ReservaDTO> reservasDTO = null;
 
-		// Si el usuario es administrador, solo ve todas las reservas, pero no puede
-		// editar ni eliminar
-		if (esAdministrador()) {
+		// Si el usuario es administrador o barman, ve todas las reservas
+		if (esAdminOBarman()) {
 			reservasDTO = reservaRepository.findAll().stream().map(reserva -> {
 				String eventoNombre = eventoRepository.findById(reserva.getEventoId()).map(Evento::getNombre)
 						.orElse("Evento no encontrado");
 				return new ReservaDTO(reserva.getId(), reserva.getNombre(), reserva.getCorreoElectronico(),
 						eventoNombre, reserva.getTelefono(), reserva.getCantidadEntradas(),
-						reserva.isAsistenciaMarcada() // El admin puede ver el estado de asistencia
+						reserva.isAsistenciaMarcada() // El admin y barman pueden ver el estado de asistencia
 				);
 			}).collect(Collectors.toList());
 		} else if (esRecepcionista()) {
@@ -84,7 +84,7 @@ public class ReservaController {
 		}
 
 		model.addAttribute("reservas", reservasDTO);
-		model.addAttribute("esAdministrador", esAdministrador());
+		model.addAttribute("esAdministrador", esAdminOBarman());
 		model.addAttribute("esRecepcionista", esRecepcionista());
 		model.addAttribute("esCliente", esCliente());
 		return "reservas";
@@ -152,7 +152,7 @@ public class ReservaController {
 	// Marca la asistencia a una reserva (solo para admin y recepcionista)
 	@PostMapping("/asistencia/{id}")
 	public String marcarAsistencia(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
-		if (!esAdministrador() && !esRecepcionista()) {
+		if (!esAdminOBarman() && !esRecepcionista()) {
 			return "redirect:/";
 		}
 
@@ -169,7 +169,7 @@ public class ReservaController {
 	// Marca la no asistencia a una reserva (solo para admin y recepcionista)
 	@PostMapping("/noAsistencia/{id}")
 	public String marcarNoAsistencia(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
-		if (!esAdministrador() && !esRecepcionista()) {
+		if (!esAdminOBarman() && !esRecepcionista()) {
 			return "redirect:/";
 		}
 
