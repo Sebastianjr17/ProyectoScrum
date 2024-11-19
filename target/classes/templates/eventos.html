@@ -29,6 +29,26 @@
 			position: relative;
 		}
 
+		/* Estilo de tarjetas para cada evento */
+		.evento-card {
+			margin-bottom: 20px;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			padding: 15px;
+			background-color: rgba(0, 0, 0, 0.8);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: space-between;
+			text-align: center;
+		}
+
+		/* Estilos de los botones de acción */
+		.btn-action {
+			margin-top: 10px;
+		}
+
+		/* Ajuste para la tabla en pantallas pequeñas */
 		@media (max-width: 576px) {
 			.btn-action {
 				display: block;
@@ -42,52 +62,48 @@
 <body>
 	<!-- Video de fondo -->
 	<video autoplay muted loop class="video-background">
-		<source th:src="@{/videos/mi-video.mp4}" type="video/mp4">
+		<source src="/videos/mi-video.mp4" type="video/mp4">
 		Tu navegador no soporta el elemento de video.
 	</video>
 
 	<div class="container mt-5">
 		<h1 class="mb-4">Eventos</h1>
 		<div class="mb-3">
+			<!-- Condición para mostrar el botón Nuevo Evento solo si es administrador -->
 			<th:block th:if="${esAdministrador}">
-				<a th:href="@{/eventos/new}" class="btn btn-primary">Nuevo Evento</a>
+				<a th:href="@{/eventos/new}" class="btn btn-primary mr-2">Nuevo Evento</a>
 			</th:block>
 			<a href="/index" class="btn btn-secondary btn-spacing">Regresar</a>
 		</div>
-		<div class="table-responsive">
-		    <table class="table table-bordered table-dark">
-		        <thead class="thead-light">
-		            <tr>
-		                <th class="text-center">Nombre</th>
-		                <th class="text-center">Fecha</th>
-		                <th class="text-center">Descripción</th>
-		                <th class="text-center">Precio Entrada (COP)</th>
-		                <th class="text-center">Sala</th>
-		                <th class="text-center">DJ</th> 
-		                <th th:if="${esAdministrador}" class="text-center">Acciones</th>
-		            </tr>
-		        </thead>
-		        <tbody th:each="eventoDTO : ${eventos}">
-		            <tr>
-		                <td class="text-center" th:text="${eventoDTO.nombre}"></td>
-		                <td class="text-center" th:text="${eventoDTO.fecha}"></td>
-		                <td class="text-center" th:text="${eventoDTO.descripcion}"></td>
-		                <td class="text-center" th:text="${eventoDTO.precioEntrada}"></td>
-		                <td class="text-center" th:text="${eventoDTO.salaNombre}"></td>
-		                <td class="text-center" th:text="${eventoDTO.djNombre}"></td> <!-- Display DJ's name -->
-						<td th:if="${esAdministrador}" class="text-center">
-						    <div class="d-flex justify-content-center">
-						        <!-- Botón Editar con margen -->
-						        <a th:href="@{/eventos/edit/{id}(id=${eventoDTO.id})}" class="btn btn-warning btn-sm btn-action mr-3">Editar</a>
-						
-						        <!-- Botón Eliminar con margen -->
-						        <a th:href="@{/eventos/delete/{id}(id=${eventoDTO.id})}" class="btn btn-danger btn-sm btn-action"
-						           onclick="return confirm('¿Estás seguro de que quieres eliminar este evento?');">Eliminar</a>
-						    </div>
-						</td>
-		            </tr>
-		        </tbody>
-		    </table>
+
+		<!-- Mensajes de éxito o error -->
+		<div th:if="${successMessage}" class="alert alert-success">
+			<p th:text="${successMessage}"></p>
+		</div>
+		<div th:if="${errorMessage}" class="alert alert-danger">
+			<p th:text="${errorMessage}"></p>
+		</div>
+
+		<!-- Lista de Eventos -->
+		<div class="row">
+			<div class="col-md-4" th:each="eventoDTO : ${eventos}">
+				<div class="evento-card">
+					<!-- Información del evento -->
+					<h4 th:text="${eventoDTO.nombre}"></h4>
+					<p><strong>Fecha:</strong> <span th:text="${eventoDTO.fecha}"></span></p>
+					<p><strong>Descripción:</strong> <span th:text="${eventoDTO.descripcion}"></span></p>
+					<p><strong>Precio Entrada:</strong> <span th:text="${eventoDTO.precioEntrada} + ' COP'"></span></p>
+					<p><strong>Sala:</strong> <span th:text="${eventoDTO.salaNombre}"></span></p>
+					<p><strong>DJ:</strong> <span th:text="${eventoDTO.djNombre}"></span></p>
+
+					<!-- Botones de acción: Editar y Eliminar -->
+					<div th:if="${esAdministrador}" class="d-flex">
+						<a th:href="@{/eventos/edit/{id}(id=${eventoDTO.id})}" class="btn btn-warning btn-sm btn-action mr-2">Editar</a>
+						<a th:href="@{/eventos/delete/{id}(id=${eventoDTO.id})}" class="btn btn-danger btn-sm btn-action"
+						   onclick="return confirm('¿Estás seguro de que quieres eliminar este evento?');">Eliminar</a>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 

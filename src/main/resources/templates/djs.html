@@ -2,137 +2,150 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DJs | EnigmaDisco</title>
-    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/5900/5900413.png" type="image/x-icon">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>DJs | EnigmaDisco</title>
+	<link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/5900/5900413.png" type="image/x-icon">
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
-    <style>
-        /* Ajustes para video de fondo */
-        .video-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
+	<style>
+		/* Ajustes para video de fondo */
+		.video-background {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			z-index: -1;
+		}
 
-        /* Fondo semitransparente para el contenido */
-        .container {
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 8px;
-            color: #fff;
-            z-index: 1;
-            position: relative;
-        }
+		/* Fondo semitransparente para el contenido */
+		.container {
+			background-color: rgba(0, 0, 0, 0.7);
+			padding: 20px;
+			border-radius: 8px;
+			color: #fff;
+			z-index: 1;
+			position: relative;
+		}
 
-        /* Estilo para las tarjetas de DJs */
-        .dj-card {
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 15px;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: space-between;
-        }
+		/* Estilo para las tarjetas de DJs */
+		.dj-card {
+			margin-bottom: 20px;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			padding: 15px;
+			background-color: rgba(0, 0, 0, 0.8);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			/* Centramos los elementos */
+			justify-content: space-between;
+			text-align: center;
+			/* Alineación centrada del texto */
+		}
 
-        /* Estilos para botones de acción */
-        .btn-action {
-            display: inline-block;
-            margin-top: 10px;
-        }
+		/* Estilo para el ícono de DJ */
+		.dj-icon {
+			color: #1DB954;
+			/* Color verde similar a Spotify */
+			margin-bottom: 10px;
+		}
 
-        /* Ajustes en los iconos de redes sociales */
-        .social-icon {
-            margin-right: 10px;
-        }
+		/* Redes Sociales: ocultar el título si no hay enlace */
+		.social-title {
+			display: none;
+			/* Ocultar el título de redes sociales por defecto */
+		}
 
-        .social-icon img {
-            width: 24px;
-            height: 24px;
-            vertical-align: middle;
-        }
+		/* Mostrar el título solo si hay enlaces de redes sociales */
+		.social-links {
+			display: block;
+			/* Asegura que el bloque de redes sociales se muestre */
+			text-align: center;
+			margin-bottom: 15px;
+			/* Espacio entre el botón de Spotify y los botones de acción */
+		}
 
-        /* Responsividad */
-        @media (max-width: 576px) {
-            .btn-action {
-                display: block;
-                width: 100%;
-                margin-bottom: 5px;
-            }
+		/* Responsividad */
+		@media (max-width: 576px) {
+			.btn-action {
+				display: block;
+				width: 100%;
+				margin-bottom: 5px;
+			}
 
-            .dj-card {
-                text-align: center;
-                align-items: center;
-            }
-        }
-    </style>
+			.dj-card {
+				align-items: center;
+			}
+		}
+	</style>
 </head>
 
 <body>
-    <!-- Video de fondo -->
-    <video autoplay muted loop class="video-background">
-        <source th:src="@{/videos/mi-video.mp4}" type="video/mp4">
-        Tu navegador no soporta el elemento de video.
-    </video>
+	<!-- Video de fondo -->
+	<video autoplay muted loop class="video-background">
+		<source th:src="@{/videos/mi-video.mp4}" type="video/mp4">
+		Tu navegador no soporta el elemento de video.
+	</video>
 
-    <div class="container mt-5">
-        <h1 class="mb-4">DJs</h1>
-        <div class="mb-3">
-            <th:block th:if="${esAdministrador}">
-                <a href="/djs/new" class="btn btn-primary">Nuevo DJ</a>
-            </th:block>
-            <a href="/index" class="btn btn-secondary btn-spacing">Regresar</a>
-        </div>
+	<div class="container mt-5">
+		<h1 class="mb-4">DJs</h1>
+		<div class="mb-3">
+			<th:block th:if="${esAdministrador}">
+				<a href="/djs/new" class="btn btn-primary">Nuevo DJ</a>
+			</th:block>
+			<a href="/index" class="btn btn-secondary btn-spacing">Regresar</a>
+		</div>
 
-        <!-- Mensajes de éxito o error -->
-        <div th:if="${successMessage}" class="alert alert-success">
-            <p th:text="${successMessage}"></p>
-        </div>
-        <div th:if="${errorMessage}" class="alert alert-danger">
-            <p th:text="${errorMessage}"></p>
-        </div>
+		<!-- Mensajes de éxito o error -->
+		<div th:if="${successMessage}" class="alert alert-success">
+			<p th:text="${successMessage}"></p>
+		</div>
+		<div th:if="${errorMessage}" class="alert alert-danger">
+			<p th:text="${errorMessage}"></p>
+		</div>
 
-        <!-- Lista de DJs -->
-        <div class="row">
-            <div class="col-md-4" th:each="dj : ${djs}">
-                <div class="dj-card">
-                    <div>
-                        <h4 th:text="${dj.nombre}"></h4>
-                        <p><strong>Estilo Musical:</strong> <span th:text="${dj.estiloMusical}"></span></p>
-                        <p><strong>Ubicación:</strong> <span th:text="${dj.ubicacion}"></span></p>
-                        <p><strong>Correo Electrónico:</strong> <span th:text="${dj.correoElectronico}"></span></p>
-                        <p><strong>Teléfono:</strong> <span th:text="${dj.telefono}"></span></p>
-						<p><strong>Redes Sociales:</strong>
-						    <span th:if="${dj.spotify}">
-						        <a th:href="${dj.spotify}" class="social-icon" target="_blank">
-						            <i class="fab fa-spotify"></i> Spotify
-						        </a>
-						    </span>
-						</p>
-                    </div>
-                    <div th:if="${esAdministrador}" class="d-flex">
-                        <a th:href="@{/djs/edit/{id}(id=${dj.id})}" class="btn btn-warning btn-sm btn-action mr-2">Editar</a>
-                        <a th:href="@{/djs/delete/{id}(id=${dj.id})}" class="btn btn-danger btn-sm btn-action"
-                            onclick="return confirm('¿Estás seguro de que quieres eliminar este DJ?');">Eliminar</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+		<!-- Lista de DJs -->
+		<div class="row">
+			<div class="col-md-4" th:each="dj : ${djs}">
+				<div class="dj-card">
+					<!-- Ícono de DJ genérico usando Font Awesome -->
+					<i class="fas fa-headphones-alt fa-5x dj-icon"></i>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+					<h4 th:text="${dj.nombre}"></h4>
+					<p><strong>Estilo Musical:</strong> <span th:text="${dj.estiloMusical}"></span></p>
+					<p><strong>Ubicación:</strong> <span th:text="${dj.ubicacion}"></span></p>
+					<p><strong>Correo Electrónico:</strong> <span th:text="${dj.correoElectronico}"></span></p>
+					<p><strong>Teléfono:</strong> <span th:text="${dj.telefono}"></span></p>
+
+					<!-- Redes Sociales -->
+					<div class="social-links">
+						<p class="social-title" th:if="${dj.spotify}"><strong>Redes Sociales:</strong></p>
+						<span th:if="${dj.spotify}">
+							<a th:href="${dj.spotify}" target="_blank" class="btn btn-success btn-sm">
+								<i class="fab fa-spotify"></i> Spotify
+							</a>
+						</span>
+					</div>
+
+					<!-- Botones de acción -->
+					<div th:if="${esAdministrador}" class="d-flex">
+						<a th:href="@{/djs/edit/{id}(id=${dj.id})}"
+							class="btn btn-warning btn-sm btn-action mr-2">Editar</a>
+						<a th:href="@{/djs/delete/{id}(id=${dj.id})}" class="btn btn-danger btn-sm btn-action"
+							onclick="return confirm('¿Estás seguro de que quieres eliminar este DJ?');">Eliminar</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
-

@@ -8,6 +8,7 @@
 	<link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/512/5900/5900413.png" type="image/x-icon">
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 	<style>
+		/* Ajustes para video de fondo */
 		.video-background {
 			position: fixed;
 			top: 0;
@@ -18,6 +19,7 @@
 			z-index: -1;
 		}
 
+		/* Fondo semitransparente para el contenido */
 		.container {
 			background-color: rgba(0, 0, 0, 0.7);
 			padding: 30px;
@@ -27,37 +29,58 @@
 			position: relative;
 		}
 
-		/* Añadir margen inferior a los formularios */
-		.form-group {
+		/* Estilo de tarjetas para cada reserva */
+		.reserva-card {
+			margin-bottom: 20px;
+			border: 1px solid #ccc;
+			border-radius: 8px;
+			padding: 15px;
+			background-color: rgba(0, 0, 0, 0.8);
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: space-between;
+			text-align: center;
+		}
+
+		/* Estilo del formulario de búsqueda */
+		.form-row {
 			margin-bottom: 20px;
 		}
 
-		/* Asegurar que los botones tengan un poco de separación */
-		.btn-spacing {
-			margin-right: 10px;
-			margin-bottom: 10px;
+		.form-row .col-md-8 {
+			padding-right: 10px;
+			/* Agrega espacio a la derecha del campo de entrada */
 		}
 
-		/* Ajustar el tamaño y espaciado de los botones en pantallas pequeñas */
-		@media (max-width: 768px) {
-			.btn-spacing {
-				width: 100%;
+		/* Ajuste para la tabla en pantallas pequeñas */
+		@media (max-width: 576px) {
+
+			/* Añadir espaciado entre el input y el botón en móviles */
+			.form-row .col-md-8 {
 				margin-bottom: 10px;
 			}
 
-			.form-row {
-				flex-direction: column;
+			.form-row .col-md-4 {
+				margin-top: 10px;
 			}
 
-			.form-control {
+			/* Asegurarse de que el formulario ocupe todo el ancho en dispositivos pequeños */
+			.form-row .col-md-8,
+			.form-row .col-md-4 {
 				width: 100%;
-				margin-bottom: 10px;
+			}
+
+			/* Mejorar el espaciado de los botones */
+			.btn {
+				width: 100%;
 			}
 		}
 	</style>
 </head>
 
 <body>
+	<!-- Video de fondo -->
 	<video autoplay muted loop class="video-background">
 		<source src="/videos/mi-video.mp4" type="video/mp4">
 		Tu navegador no soporta el elemento de video.
@@ -79,72 +102,55 @@
 					</div>
 				</div>
 			</form>
-			<div class="mb-3">
-				<a href="/reservas/new" class="btn btn-primary btn-spacing">Reservar</a>
+		</div>
+
+		<!-- Mensajes de éxito o error -->
+		<div th:if="${successMessage}" class="alert alert-success">
+			<p th:text="${successMessage}"></p>
+		</div>
+		<div th:if="${errorMessage}" class="alert alert-danger">
+			<p th:text="${errorMessage}"></p>
+		</div>
+
+		<!-- Botón para nueva reserva solo visible para clientes -->
+		<div th:if="${esCliente}">
+			<a href="/reservas/new" class="btn btn-primary mb-3">Reservar</a>
+		</div>
+
+		<!-- Botón para regresar -->
+		<a href="/index" class="btn btn-secondary mb-3">Regresar</a>
+
+		<!-- Lista de Reservas -->
+		<div class="row">
+			<div class="col-md-4" th:each="reserva : ${reservas}">
+				<div class="reserva-card">
+					<!-- Información de la reserva -->
+					<h4 th:text="${reserva.clienteNombre}"></h4>
+					<p><strong>Correo:</strong> <span th:text="${reserva.clienteCorreo}"></span></p>
+					<p><strong>Teléfono:</strong> <span th:text="${reserva.telefono}"></span></p>
+					<p><strong>Evento:</strong> <span th:text="${reserva.eventoNombre}"></span></p>
+					<p><strong>Cantidad de Entradas:</strong> <span th:text="${reserva.cantidadEntradas}"></span></p>
+					<p><strong>Asistencia:</strong> <span
+							th:text="${reserva.asistenciaMarcada ? 'Asistió' : 'No Asistió'}"></span></p>
+
+					<!-- Botones de acción: Marcar asistencia y no asistencia (solo para recepcionistas) -->
+					<div th:if="${esRecepcionista}" class="d-flex justify-content-between">
+						<form th:action="@{/reservas/asistencia/{id}(id=${reserva.id})}" method="post" class="mr-2">
+							<button type="submit" class="btn btn-success btn-sm"
+								th:disabled="${reserva.asistenciaMarcada}">
+								<span th:text="${reserva.asistenciaMarcada ? 'Asistió' : 'Marcar Asistencia'}"></span>
+							</button>
+						</form>
+						<form th:action="@{/reservas/noAsistencia/{id}(id=${reserva.id})}" method="post" class="ml-2">
+							<button type="submit" class="btn btn-danger btn-sm"
+								th:disabled="${!reserva.asistenciaMarcada}">
+								<span
+									th:text="${!reserva.asistenciaMarcada ? 'No Asistió' : 'Marcar No Asistencia'}"></span>
+							</button>
+						</form>
+					</div>
+				</div>
 			</div>
-		</div>
-
-		<!-- Botón de regresar siempre visible -->
-		<div class="mb-3">
-			<a href="/index" class="btn btn-secondary btn-spacing">Regresar</a>
-		</div>
-
-		<div class="table-responsive">
-			<table class="table table-bordered table-dark">
-				<thead class="thead-light">
-					<tr>
-						<th class="text-center">Nombre</th>
-						<th class="text-center">Correo Electrónico</th>
-						<th class="text-center">Teléfono</th>
-						<th class="text-center">Evento</th>
-						<th class="text-center">Cantidad Entradas</th>
-						<th class="text-center">Asistencia</th>
-
-						<!-- Solo mostrar la columna de Acciones si es recepcionista -->
-						<th class="text-center" th:if="${esRecepcionista}">Acciones</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="reserva : ${reservas}">
-						<td class="text-center" th:text="${reserva.clienteNombre}"></td>
-						<td class="text-center" th:text="${reserva.clienteCorreo}"></td>
-						<td class="text-center" th:text="${reserva.telefono}"></td>
-						<td class="text-center" th:text="${reserva.eventoNombre}"></td>
-						<td class="text-center" th:text="${reserva.cantidadEntradas}"></td>
-
-						<!-- Mostrar el estado de asistencia para todos los roles -->
-						<td class="text-center">
-							<span th:text="${reserva.asistenciaMarcada ? 'Asistió' : 'No Asistió'}"></span>
-						</td>
-
-						<!-- Mostrar las acciones solo si es recepcionista -->
-						<td class="text-center" th:if="${esRecepcionista}">
-							<div class="d-flex justify-content-between">
-								<!-- Formulario para Marcar Asistencia -->
-								<form th:action="@{/reservas/asistencia/{id}(id=${reserva.id})}" method="post"
-									class="mr-2">
-									<button type="submit" class="btn btn-success btn-sm"
-										th:disabled="${reserva.asistenciaMarcada}">
-										<span
-											th:text="${reserva.asistenciaMarcada ? 'Asistió' : 'Marcar Asistencia'}"></span>
-									</button>
-								</form>
-
-								<!-- Formulario para Marcar No Asistencia -->
-								<form th:action="@{/reservas/noAsistencia/{id}(id=${reserva.id})}" method="post"
-									class="ml-2">
-									<button type="submit" class="btn btn-danger btn-sm"
-										th:disabled="${!reserva.asistenciaMarcada}">
-										<span
-											th:text="${!reserva.asistenciaMarcada ? 'No Asistió' : 'Marcar No Asistencia'}"></span>
-									</button>
-								</form>
-							</div>
-						</td>
-
-					</tr>
-				</tbody>
-			</table>
 		</div>
 	</div>
 
